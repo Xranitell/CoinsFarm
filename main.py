@@ -1,14 +1,12 @@
 import datetime
+import random
 import time
-
 from datetime import datetime
-
 from telethon import TelegramClient
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 import asyncio
 from data.config import *
 import sys
-
 from colorama import init
 init(strip=not sys.stdout.isatty()) # strip colors if stdout is redirected
 from termcolor import cprint
@@ -17,13 +15,21 @@ from pyfiglet import figlet_format
 api_id = ''
 api_hash =''
 phone =''
+sessionname =''
 
 # Создание клиента
-api_id = input("Enter api_id")
-api_hash = input("Enter api_hash")
-phone = input("Enter phone")
+print('------------------------------------')
+string = input("Enter connecting string\n")
+list = string.split(':')
+sessionname = list[0]
+api_id = list[1]
+api_hash = list[2]
+phone = list[3]
+cl_password = list[4]
+print('------------------------------------')
 
-client = TelegramClient('session_name', api_id, api_hash)
+
+client = TelegramClient(sessionname, api_id, api_hash)
 
 async def send_message_TRX():
     receiver = receiver_trx
@@ -33,7 +39,7 @@ async def send_message_TRX():
 
     now = datetime.now()
     current_time = now.strftime("%H:%M:%S")
-    print("[{}] Сообщение TRX отправлено".format(current_time))
+    cprint("[{}] Сообщение TRX отправлено".format(current_time), 'yellow')
 
 async def send_message_BTC():
     receiver = receiver_btc
@@ -43,7 +49,7 @@ async def send_message_BTC():
 
     now = datetime.now()
     current_time = now.strftime("%H:%M:%S")
-    print("[{}] Сообщение BTC отправлено".format(current_time))
+    cprint("[{}] Сообщение BTC отправлено".format(current_time), 'yellow')
 
 async def send_message_BNB():
     receiver = receiver_bnb
@@ -53,17 +59,19 @@ async def send_message_BNB():
 
     now = datetime.now()
     current_time = now.strftime("%H:%M:%S")
-    print("[{}] Сообщение BNB отправлено".format(current_time))
+    cprint("[{}] Сообщение BNB отправлено".format(current_time), 'yellow')
 
 
 async def main():
     #input api
-
+    print(client.session)
 
     cprint(figlet_format('Nico \n Farm', font='starwars'),
-           'green', 'on_red', attrs=['bold'])
+           'yellow', 'on_black', attrs=['bold'])
 
-    await client.start(phone)
+    await client.start(phone, cl_password)
+    cprint('Авторизация успешна', 'green')
+
     scheduler = AsyncIOScheduler()
 
     scheduler.add_job(send_message_TRX, 'interval', seconds= receiver_trx[2])
