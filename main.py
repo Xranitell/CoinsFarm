@@ -14,9 +14,16 @@ init(strip=not sys.stdout.isatty()) # strip colors if stdout is redirected
 from termcolor import cprint
 from pyfiglet import figlet_format
 
-# Создание клиента
-client = TelegramClient('session_name', api_id, api_hash)
+api_id = ''
+api_hash =''
+phone =''
 
+# Создание клиента
+api_id = input("Enter api_id")
+api_hash = input("Enter api_hash")
+phone = input("Enter phone")
+
+client = TelegramClient('session_name', api_id, api_hash)
 
 async def send_message_TRX():
     receiver = receiver_trx
@@ -50,11 +57,13 @@ async def send_message_BNB():
 
 
 async def main():
+    #input api
+
 
     cprint(figlet_format('Nico \n Farm', font='starwars'),
            'green', 'on_red', attrs=['bold'])
 
-    await client.start(phone_number)
+    await client.start(phone)
     scheduler = AsyncIOScheduler()
 
     scheduler.add_job(send_message_TRX, 'interval', seconds= receiver_trx[2])
